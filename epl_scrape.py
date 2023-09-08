@@ -83,8 +83,6 @@ def get_match_data(url):
 
 match_links = get_match_links(URLS)
 
-# time.sleep(3.5), use to delay code
-
 final_data = [get_match_data(match) for match in match_links]
 # print(final_data)
 
