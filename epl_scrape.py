@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import functools
+import timeit
 import pandas as pd
 
 
@@ -41,10 +42,11 @@ def get_match_links(urls):
     """
     links = []
 
-    for url in urls:
-        page = requests.get(url)
+    for season in urls:
+        page = requests.get(season)
         soup = BeautifulSoup(page.content, "html.parser")
-        links.append(["https://fbref.com" + a["href"] for a in (td.find('a') for td in soup.find_all('td', attrs={"data-stat": "score"})) if a])
+        links.append(["https://fbref.com" + a['href'] for a in (td.a for td in soup.find_all('td', attrs={"data-stat": "score"})) if a])
+        # print(links.append(["https://fbref.com" + a["href"] for a in (td.find('a') for td in soup.find_all('td', attrs={"data-stat": "score"})) if a]))
 
     return [match for year in links for match in year]
 
@@ -83,10 +85,12 @@ def get_match_data(url):
 
 match_links = get_match_links(URLS)
 
-final_data = [get_match_data(match) for match in match_links]
-# print(final_data)
+print(match_links)
 
-match_df = pd.DataFrame(final_data)
-print(match_df)
-
-match_df.to_csv("epl_match_data_1617.csv", index=False)
+# final_data = [get_match_data(match) for match in match_links]
+# # print(final_data)
+#
+# match_df = pd.DataFrame(final_data)
+# print(match_df)
+#
+# match_df.to_csv("epl_match_data_1617.csv", index=False)
